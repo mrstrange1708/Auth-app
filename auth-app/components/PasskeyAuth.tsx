@@ -15,9 +15,10 @@ interface PasskeyAuthProps {
     mode: 'register' | 'login';
     email: string;
     onSuccess: (data: any) => void;
+    onError?: (error: string) => void;
 }
 
-export default function PasskeyAuth({ mode, email, onSuccess }: PasskeyAuthProps) {
+export default function PasskeyAuth({ mode, email, onSuccess, onError }: PasskeyAuthProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [isSupported, setIsSupported] = useState(false);
     const [supportMessage, setSupportMessage] = useState('');
@@ -61,7 +62,9 @@ export default function PasskeyAuth({ mode, email, onSuccess }: PasskeyAuthProps
             onSuccess(result);
         } catch (error: any) {
             console.error('Passkey registration error:', error);
-            toast.error(error.message || 'Failed to register passkey', { id: loadingToast });
+            const errorMessage = error.message || 'Failed to register passkey';
+            toast.error(errorMessage, { id: loadingToast });
+            onError?.(errorMessage);
         } finally {
             setIsLoading(false);
         }
@@ -90,7 +93,9 @@ export default function PasskeyAuth({ mode, email, onSuccess }: PasskeyAuthProps
             onSuccess(result);
         } catch (error: any) {
             console.error('Passkey login error:', error);
-            toast.error(error.message || 'Failed to authenticate with passkey', { id: loadingToast });
+            const errorMessage = error.message || 'Failed to authenticate with passkey';
+            toast.error(errorMessage, { id: loadingToast });
+            onError?.(errorMessage);
         } finally {
             setIsLoading(false);
         }
