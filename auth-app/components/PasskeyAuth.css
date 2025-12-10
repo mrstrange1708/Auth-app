@@ -1,0 +1,106 @@
+.passkey-auth {
+    width: 100%;
+}
+
+.passkey-button {
+    width: 100%;
+    padding: var(--spacing-md);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 2px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.passkey-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.passkey-button:hover::before {
+    left: 100%;
+}
+
+.passkey-button:hover:not(.disabled) {
+    background: rgba(0, 217, 255, 0.12);
+    border-color: rgba(0, 217, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 217, 255, 0.3);
+}
+
+.passkey-button:active:not(.disabled) {
+    transform: translateY(0);
+}
+
+.passkey-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.passkey-icon-container {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+}
+
+.passkey-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.passkey-content {
+    flex: 1;
+    text-align: left;
+}
+
+.passkey-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+}
+
+.passkey-subtitle {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+}
+
+/* Fingerprint Animation */
+@keyframes fingerprint-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(1.05);
+    }
+}
+
+.passkey-icon svg {
+    filter: drop-shadow(0 2px 8px rgba(139, 92, 246, 0.5));
+}
