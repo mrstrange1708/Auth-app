@@ -61,6 +61,9 @@ app.get('/health', (req, res) => {
     });
 });
 
+app.use('/', (req, res) => {
+    res.send('Welcome to auth-app!');
+})
 // 404 handler
 app.use((req, res) => {
     res.status(404).json({ error: 'Route not found' });
