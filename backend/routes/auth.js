@@ -118,10 +118,11 @@ router.post('/passkey/register-verify', authMiddleware, async (req, res) => {
 
         const { credential: credentialData } = verification.registrationInfo;
 
-        // Add credential to user - convert Uint8Array to Buffer for Mongoose
+        // Add credential to user
+        // credentialData.id is a base64url string. We must decode it to binary to store in Buffer correctly.
         user.credentials.push({
-            credentialID: Buffer.from(credentialData.id),
-            publicKey: Buffer.from(credentialData.publicKey),
+            credentialID: Buffer.from(credentialData.id, 'base64url'),
+            publicKey: Buffer.from(credentialData.publicKey), // This is already a UInt8Array usually, but Buffer.from handles it
             counter: credentialData.counter,
             transports: credential.response.transports || [],
             credentialDeviceType: verification.registrationInfo.credentialDeviceType,
@@ -200,8 +201,9 @@ router.post('/passkey/login-verify', async (req, res) => {
         }
 
         // Find the credential
+        // credential.id is base64url, decode to binary to match DB
         const userCredential = user.credentials.find(
-            cred => cred.credentialID.equals(Buffer.from(credential.id))
+            cred => cred.credentialID.equals(Buffer.from(credential.id, 'base64url'))
         );
 
         if (!userCredential) {
@@ -214,8 +216,8 @@ router.post('/passkey/login-verify', async (req, res) => {
             expectedOrigin: origin,
             expectedRPID: rpID,
             credential: {
-                id: new Uint8Array(userCredential.credentialID),
-                publicKey: new Uint8Array(userCredential.publicKey),
+                id: userCredential.credentialID, // Already a Buffer/Uint8Array
+                publicKey: userCredential.publicKey,
                 counter: userCredential.counter,
             },
         });
