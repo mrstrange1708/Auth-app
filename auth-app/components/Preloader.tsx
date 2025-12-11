@@ -5,14 +5,18 @@ import { createPreloaderTimeline } from '@/lib/animations';
 import './Preloader.css';
 
 interface PreloaderProps {
-    onComplete: () => void;
+    onComplete?: () => void;
 }
 
 export default function Preloader({ onComplete }: PreloaderProps) {
     useEffect(() => {
         // Simulate loading time and run animation
         const timer = setTimeout(() => {
-            createPreloaderTimeline(onComplete);
+            if (onComplete) {
+                createPreloaderTimeline(onComplete);
+            } else {
+                createPreloaderTimeline(() => { }); // Fallback no-op
+            }
         }, 500);
 
         return () => clearTimeout(timer);
