@@ -118,47 +118,7 @@ The frontend will run on `http://localhost:3000`
 - Use your biometric (Touch ID/Face ID) or security key
 - If 2FA is enabled, enter the 6-digit code from your authenticator app
 
-## 📱 Swipe Demo
 
-The homepage features an interactive swipe card demo:
-- Swipe LEFT or RIGHT to explore features
-- Cards animate smoothly with spring physics
-- Stack of cards shows upcoming content
-- Reset button to restart the demo
-
-## 🎨 Design System
-
-### Color Palette
-- **Primary**: Purple gradient (#667eea → #764ba2)
-- **Secondary**: Pink gradient (#f093fb → #f5576c)
-- **Accent**: Blue gradient (#4facfe → #00f2fe)
-- **Success**: Green gradient (#43e97b → #38f9d7)
-
-### Typography
-- **Font Family**: Inter (Google Fonts)
-- **Weights**: 300-900
-
-### Effects
-- Glassmorphism with `backdrop-filter: blur(20px)`
-- Multi-layer shadows for depth
-- Smooth transitions (150ms-500ms)
-- Animated gradient backgrounds
-
-## 🔧 API Endpoints
-
-### Authentication
-```
-POST /api/auth/register                    - Register new user
-POST /api/auth/passkey/register-options    - Get passkey registration options
-POST /api/auth/passkey/register-verify     - Verify passkey registration
-POST /api/auth/passkey/login-options       - Get passkey login options
-POST /api/auth/passkey/login-verify        - Verify passkey login
-POST /api/auth/2fa/setup                   - Setup 2FA
-POST /api/auth/2fa/verify                  - Verify and enable 2FA
-POST /api/auth/2fa/validate                - Validate 2FA during login
-POST /api/auth/2fa/disable                 - Disable 2FA
-GET  /api/auth/me                          - Get current user (protected)
-```
 
 ## 🌐 Browser Support
 
@@ -183,7 +143,7 @@ GET  /api/auth/me                          - Get current user (protected)
 
 ## 📝 Environment Variables
 
-### Backend (.env)
+### Backend (.env)(Example)
 ```
 MONGODB_URI=mongodb://localhost:27017/auth-app
 JWT_SECRET=your-secret-key
@@ -194,21 +154,11 @@ ORIGIN=http://localhost:3000
 SESSION_SECRET=your-session-secret
 ```
 
-### Frontend (.env.local)
+### Frontend (.env.local)(Example)
 ```
 NEXT_PUBLIC_API_URL=http://localhost:5000/api
 ```
 
-## 🚀 Production Deployment
-
-### Important Changes for Production
-
-1. **Update RP_ID** - Set to your domain (e.g., `example.com`)
-2. **Update ORIGIN** - Set to your app URL (e.g., `https://example.com`)
-3. **Enable HTTPS** - WebAuthn requires HTTPS
-4. **Change JWT_SECRET** - Use a strong random string
-5. **Update MONGODB_URI** - Use production database
-6. **Set NODE_ENV** - Set to `production`
 
 ## 📚 Learn More
 
@@ -241,9 +191,7 @@ Since this is a fresh installation, you'll need to register your own account. Th
 - Check MONGODB_URI in .env
 - Verify MongoDB is accessible
 
-## 📄 License
 
-MIT License - feel free to use this for your projects!
 
 ## 👨‍💻 Author
 
