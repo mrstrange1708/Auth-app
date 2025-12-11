@@ -14,8 +14,6 @@ const {
     verifyAuthenticationResponse,
 } = require('@simplewebauthn/server');
 
-const { isoBase64URL } = require('@simplewebauthn/server/helpers');
-
 // WebAuthn configuration
 const rpName = process.env.RP_NAME || 'Premium Auth App';
 const rpID = process.env.RP_ID || 'localhost';
@@ -80,9 +78,9 @@ router.post('/passkey/register-options', authMiddleware, async (req, res) => {
                 authenticatorAttachment: 'platform',
             },
             excludeCredentials: user.credentials.map(cred => ({
-                id: isoBase64URL.fromBuffer(cred.credentialID),
+                id: cred.credentialID.toString('base64url'),
                 type: 'public-key',
-                transports: cred.transports,
+                transports: cred.transports || [],
             })),
         });
 
@@ -161,14 +159,23 @@ router.post('/passkey/login-options', async (req, res) => {
             return res.status(400).json({ error: 'No passkeys registered for this user' });
         }
 
+        // Generate options with NO transport hints to allow browser to find it anywhere
+        const allowCredentials = user.credentials.map(cred => ({
+            id: cred.credentialID.toString('base64url'),
+            type: 'public-key',
+            transports: cred.transports || [], // Revert to original behavior
+        }));
+
+        console.log('generated allowCredentials:', JSON.stringify(allowCredentials, null, 2));
+
         const options = await generateAuthenticationOptions({
             rpID,
-            allowCredentials: user.credentials.map(cred => ({
-                id: isoBase64URL.fromBuffer(cred.credentialID),
-                type: 'public-key',
-                transports: cred.transports,
-            })),
+            allowCredentials,
             userVerification: 'preferred',
+            authenticatorSelection: {
+                authenticatorAttachment: 'platform',
+                userVerification: 'preferred',
+            },
         });
 
         // Save challenge for verification

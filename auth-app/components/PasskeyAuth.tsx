@@ -76,6 +76,12 @@ export default function PasskeyAuth({ mode, email, onSuccess, onError }: Passkey
             return;
         }
 
+        // Check if email is provided
+        if (!email || email.trim() === '') {
+            toast.error('Please enter your email address first');
+            return;
+        }
+
         setIsLoading(true);
         const loadingToast = toast.loading('Authenticating...');
 

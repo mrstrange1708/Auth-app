@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
 import TwoFactorSetup from '@/components/TwoFactorSetup';
 import PasskeyAuth from '@/components/PasskeyAuth';
 import { authAPI } from '@/lib/api';
@@ -40,7 +41,7 @@ export default function DashboardPage() {
             const data = await authAPI.getCurrentUser();
             setUser(data);
         } catch (err: any) {
-            setError('Failed to load user data');
+            toast.error('Failed to load user data');
             if (err.response?.status === 401) {
                 router.push('/login');
             }
@@ -56,20 +57,20 @@ export default function DashboardPage() {
 
     const handle2FAComplete = (codes: string[]) => {
         setBackupCodes(codes);
-        setSuccess('2FA enabled successfully!');
+        toast.success('2FA enabled successfully! 🔐');
         setShow2FASetup(false);
         loadUserData();
     };
 
     const handlePasskeySuccess = () => {
-        setSuccess('Passkey registered successfully!');
+        toast.success('Passkey registered successfully! 🎉');
         setShowPasskeySetup(false);
         loadUserData();
     };
 
     const copyBackupCodes = () => {
         navigator.clipboard.writeText(backupCodes.join('\n'));
-        setSuccess('Backup codes copied to clipboard!');
+        toast.success('Backup codes copied to clipboard! 📋');
     };
 
     if (loading) {
@@ -99,20 +100,6 @@ export default function DashboardPage() {
                         Logout
                     </button>
                 </motion.div>
-
-                {error && (
-                    <div className="alert alert-error">
-                        <span>⚠️</span>
-                        {error}
-                    </div>
-                )}
-
-                {success && (
-                    <div className="alert alert-success">
-                        <span>✓</span>
-                        {success}
-                    </div>
-                )}
 
                 {backupCodes.length > 0 && (
                     <motion.div
@@ -154,7 +141,7 @@ export default function DashboardPage() {
                                 <span className="info-label">Username</span>
                                 <span className="info-value">{user?.username}</span>
                             </div>
-                            
+
                         </div>
                     </motion.div>
 

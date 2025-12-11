@@ -26,7 +26,7 @@ export const isPlatformAuthenticatorAvailable = async (): Promise<boolean> => {
 // Register a new passkey
 export const registerPasskey = async (options: any) => {
     try {
-        const credential = await startRegistration(options);
+        const credential = await startRegistration({ optionsJSON: options });
         return credential;
     } catch (error: any) {
         console.error('Passkey registration error:', error);
@@ -47,7 +47,9 @@ export const registerPasskey = async (options: any) => {
 // Authenticate with passkey
 export const authenticateWithPasskey = async (options: any) => {
     try {
-        const credential = await startAuthentication(options);
+        // Fix for "startAuthentication() was not called correctly" warning
+        // Newer versions of SimpleWebAuthn expect { optionsJSON: options }
+        const credential = await startAuthentication({ optionsJSON: options });
         return credential;
     } catch (error: any) {
         console.error('Passkey authentication error:', error);

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 import PasskeyAuth from '@/components/PasskeyAuth';
 import { authAPI } from '@/lib/api';
 import './register.css';
@@ -19,23 +20,22 @@ export default function RegisterPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-        setSuccess('');
         setIsLoading(true);
 
         try {
             const data = await authAPI.register(formData.email, formData.username);
             localStorage.setItem('authToken', data.token);
-            setSuccess('Account created successfully!');
+            toast.success('Account created successfully! 🎉');
             setStep('passkey');
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Registration failed');
+            toast.error(err.response?.data?.error || 'Registration failed');
         } finally {
             setIsLoading(false);
         }
     };
 
     const handlePasskeySuccess = (data: any) => {
-        setSuccess('Passkey registered successfully! Redirecting...');
+        toast.success('Passkey registered successfully! Redirecting... 🚀');
         setTimeout(() => router.push('/dashboard'), 1500);
     };
 
@@ -58,20 +58,6 @@ export default function RegisterPage() {
                                 <h1>Create Account</h1>
                                 <p>Join the future of secure authentication</p>
                             </div>
-
-                            {error && (
-                                <div className="alert alert-error">
-                                    <span>⚠️</span>
-                                    {error}
-                                </div>
-                            )}
-
-                            {success && (
-                                <div className="alert alert-success">
-                                    <span>✓</span>
-                                    {success}
-                                </div>
-                            )}
 
                             <form onSubmit={handleSubmit} className="auth-form">
                                 <div className="input-group">
@@ -121,20 +107,6 @@ export default function RegisterPage() {
                                 <h1>Setup Passkey</h1>
                                 <p>Secure your account with biometric authentication</p>
                             </div>
-
-                            {error && (
-                                <div className="alert alert-error">
-                                    <span>⚠️</span>
-                                    {error}
-                                </div>
-                            )}
-
-                            {success && (
-                                <div className="alert alert-success">
-                                    <span>✓</span>
-                                    {success}
-                                </div>
-                            )}
 
                             <PasskeyAuth
                                 mode="register"
